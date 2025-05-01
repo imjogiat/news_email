@@ -32,8 +32,12 @@ From: org.imj.yyc@gmail.com
     """
 
 for article in content['results']:
+    # improve output of the email message- make it more readable and sensible
+    email_message = email_message + "\n\n" + str(article["title"]) + "\n\n"+ str(article["link"]) + "\n\n" + str(article["description"])
+
+    # print(article)
     # email_message = email_message + "\n\n" + str(article["title"]) + "\n\n" + str(article["description"])
-    email_message = email_message + "\n\n" + str(article["title"]) + "\n\n" + str(article["description"])
+
     # print(type(article["title"]))
     # print(type(article["description"]))
 
