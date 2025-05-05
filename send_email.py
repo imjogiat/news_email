@@ -1,9 +1,12 @@
 import os
 import smtplib
 import ssl
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.message import EmailMessage
 
 
-def send_email(message):
+def send_email(message):    
     #Step 1: Set the host string and port number integer
     host = "smtp.gmail.com"
     port = 465
@@ -18,7 +21,7 @@ def send_email(message):
     #will leave as string password for now while testing
     #**REMOVE STRING PASSWORD BEFORE COMMITING AND PUSHING TO GITHUB**
     username = "org.imj.yyc@gmail.com"
-    password = "xxx"
+    password = "jtmy mtxi rutu ykba"
     # password = os.getenv("PASSWORD")
 
     receive_email = "imjogiat@gmail.com"
@@ -34,4 +37,5 @@ def send_email(message):
 
     with smtplib.SMTP_SSL(host, port, context=context) as mailserver:
         mailserver.login(username, password)
-        mailserver.sendmail(username, receive_email, message)
+        mailserver.send_message(message, username, receive_email)
+       

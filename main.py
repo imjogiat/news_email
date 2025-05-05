@@ -1,12 +1,15 @@
 import os
 import requests
 import send_email
-#App to email daily news to a user email address
-#No front end required
+from email.message import EmailMessage
+import datetime
+"""App to email daily news to a user email address
+No front end GUI required"""
 
+topic = "politics"
 #API key and URL for the API- remember to change the url last section to your apikey
-url = """https://newsdata.io/api/1/news?
-apikey=pub_8363350c81b4721e6b54471d1822c0a9ab1ef&language=en   
+url = f"""https://newsdata.io/api/1/news?
+apikey=pub_8363350c81b4721e6b54471d1822c0a9ab1ef&country=ca&language=en&category={topic}     
         """
 
 apiKey = "pub_8363350c81b4721e6b54471d1822c0a9ab1ef"
@@ -23,25 +26,45 @@ request = requests.get(url)
 #can be used to create a dict structure
 # content = request.text
 content = request.json()
-# print(content)
-# # print(content['articles'])
 
-email_message = f"""\
-Subject: News updates from news API
-From: org.imj.yyc@gmail.com
-    """
+todays_date = str(datetime.datetime.now())
+todays_date = (todays_date.split(" "))[0]
 
-for article in content['results']:
-    # improve output of the email message- make it more readable and sensible
-    email_message = email_message + "\n\n" + str(article["title"]) + "\n\n"+ str(article["link"]) + "\n\n" + str(article["description"])
+email_message = EmailMessage()
+email_string = f"""Good Morning,
 
-    # print(article)
-    # email_message = email_message + "\n\n" + str(article["title"]) + "\n\n" + str(article["description"])
+Today's date is {todays_date}. Your daily news articles list can be found below. Below the article title is a link to 
+the website article where you can read the full article content. If you have any further suggestions to improve the quality 
+or clarity of these notifications, please feel free to reply to these emails. You can also let us know if you would like to
+change the topic of the articles that you receive each day.
 
-    # print(type(article["title"]))
-    # print(type(article["description"]))
+We do not subscribe to the views and opinions that may be described in the articles that we link. 
 
-email_message = email_message.encode("utf-8")
+Have a great rest of your day and week!
+
+Best Regards,
+IMJ Information Services
+_______________________________________________________________________________
+\n\n\n
+"""
+
+for i,article in enumerate(content['results']):
+        email_string = email_string + f""" 
+    {i+1}. Article Title: {str(article["title"])}
+    URL link: {str(article["link"])}\n\n
+    Brief Description: {str(article["description"])[:120]}...\n\n
+        """
+    
+email_message["Subject"] = "Daily News Updates"
+email_message["From"] = "org.imj.yyc@gmail.com"
+email_message["To"] = "imjogiat@gmail.com"
+
+email_message.set_content(email_string)
+# email_message = email_message.encode("utf-8")
 
 # print(email_message)
 send_email.send_email(email_message)
+
+#Future tasks/improvement: format the text in the email 
+# (Title, bold, italics, images, company info/logo/address)
+#other url hyperlinks
