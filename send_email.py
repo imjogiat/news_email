@@ -21,7 +21,7 @@ def send_email(message):
     #will leave as string password for now while testing
     #**REMOVE STRING PASSWORD BEFORE COMMITING AND PUSHING TO GITHUB**
     username = "org.imj.yyc@gmail.com"
-    password = "jtmy mtxi rutu ykba"
+    password = "PASSWORD"
     # password = os.getenv("PASSWORD")
 
     receive_email = "imjogiat@gmail.com"
